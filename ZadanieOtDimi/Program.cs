@@ -59,9 +59,12 @@ internal class Program
         {
             Console.Clear();
             PrintCity(db);
-
+            Thread.Sleep(2000);
+            
+            
             Console.Write("\nВыберите вариант сортировки:\n" +
                           "1. По названию города\n" +
+                          "E. Выход\n" +
                           "Введите значение: ");
 
             var sortNumber = Console.ReadLine();
@@ -70,14 +73,22 @@ internal class Program
                 case "1":
                 {
                     Console.Clear();
-                    Console.WriteLine("| Id | City |");
+                    Console.WriteLine("-----------------------");
+                    Console.WriteLine("| Id  |      City     |");
+                    Console.WriteLine("-----------------------");
+                    
 
                     foreach (var city in db.Cities.OrderBy(c => c.NameCity))
                     {
-                        Console.WriteLine($"| {city.Id} | {city.NameCity} |");
+                        Console.WriteLine("| {0, 3} | {1, 13} |", city.Id, city.NameCity);
+                        Console.WriteLine("-----------------------");
                     }
 
                     PressAnyKey();
+                    return;
+                }
+                case "e":
+                {
                     return;
                 }
                 default:
@@ -91,10 +102,14 @@ internal class Program
 
     private static void PrintCity(ApplicationContext db)
     {
-        Console.WriteLine("| Id | City |");
+        Console.Clear();
+        Console.WriteLine("-----------------------");
+        Console.WriteLine("| Id  |      City     |");
+        Console.WriteLine("-----------------------");
         foreach (var city in db.Cities.ToList())
         {
-            Console.WriteLine($"| {city.Id} | {city.NameCity} |");
+            Console.WriteLine("| {0, 3} | {1, 13} |", city.Id, city.NameCity);
+            Console.WriteLine("-----------------------");
         }
     }
 
@@ -109,6 +124,7 @@ internal class Program
         {
             Console.Clear();
             PrintUser(db);
+            Thread.Sleep(2000);
 
             Console.Write("\nВыберите вариант сортировки:\n" +
                           "1. По имени\n" +
@@ -148,91 +164,119 @@ internal class Program
 
     private static void PrintUser(ApplicationContext db)
     {
-        Console.WriteLine("| Id |    Name   | Age |");
+        Console.WriteLine("--------------------------");
+        Console.WriteLine("| Id  |    Name    | Age |");
+        Console.WriteLine("--------------------------");
         foreach (var user in db.Users.ToList())
         {
-            Console.WriteLine($"| {user.Id} | {user.Name} | {user.Age} |");
+            Console.WriteLine("| {0, 3} | {1, 10} | {2, 3} |", user.Id, user.Name, user.Age);
+            Console.WriteLine("--------------------------");
         }
     }
 
     private static void PrintSortedUser(IOrderedQueryable<User> sortedUser)
     {
         Console.Clear();
-        Console.WriteLine("| Id |    Name   | Age |");
+        Console.WriteLine("--------------------------");
+        Console.WriteLine("| Id  |    Name    | Age |");
+        Console.WriteLine("--------------------------");
         foreach (var user in sortedUser)
         {
-            Console.WriteLine($"| {user.Id} | {user.Name} | {user.Age} |");
+            Console.WriteLine("| {0, 3} | {1, 10} | {2, 3} |", user.Id, user.Name, user.Age);
+            Console.WriteLine("--------------------------");
         }
     }
 
     #endregion
 
-
+    
+    #region Animal
     private static void WorkWithAnimal(ApplicationContext db)
     {
         PrintAnimal(db);
-        Thread.Sleep(3000);
-        Console.Write("Выберите вариант сортировки:\n" +
+        Thread.Sleep(2000);
+        
+        Console.Write("\nВыберите вариант сортировки:\n" +
                       "1. По имени\n" +
                       "2. По возрасту\n" +
                       "3. По породе\n" +
-                      "Введите значение:");
+                      "E. Выход\n" +
+                      "Введите значение: ");
+        
         var sortNumber = Console.ReadLine();
-        switch (sortNumber)
+        switch (sortNumber.ToLower())
         {
             case "1":
+            {
                 Console.Clear();
                 var animalSortWithName = db.Animals.OrderBy(a => a.Name);
-                Console.WriteLine("|   Id   |   Name  | Age |    Breed    |");
-                foreach (var a in animalSortWithName)
-                {
-                    Console.WriteLine("| {0, 1} | {1, 7} |  {2, 1}  | {3, 1} |", a.Id, a.Name, a.Age, a.Breed);
-                }
-
+                
+                PrintSortedAnimal(animalSortWithName);
+                PressAnyKey();
                 break;
+            }
             case "2":
+            {
                 Console.Clear();
                 var animalSortWithAge = db.Animals.OrderBy(a => a.Age);
-                Console.WriteLine("Id|   Name  | Age |    Breed");
-                foreach (var a in animalSortWithAge)
-                {
-                    Console.WriteLine("{0, 1} | {1, 7} |  {2, 1}  | {3, 1}", a.Id, a.Name, a.Age, a.Breed);
-                }
-
+                
+                PrintSortedAnimal(animalSortWithAge);
+                PressAnyKey();
                 break;
+            }
             case "3":
+            {
                 Console.Clear();
                 var animalSortWithBreed = db.Animals.OrderBy(a => a.Breed);
-                Console.WriteLine("Id|   Name  | Age |    Breed");
-                foreach (var a in animalSortWithBreed)
-                {
-                    Console.WriteLine("{0, 1} | {1, 7} |  {2, 1}  | {3, 1}", a.Id, a.Name, a.Age, a.Breed);
-                }
-
+                
+                PrintSortedAnimal(animalSortWithBreed);
+                PressAnyKey();
                 break;
+            }
+            case "e":
+            {
+                return;
+            }
             default:
-                Console.Clear();
-                Console.WriteLine("Такой сортировки нет");
-                Thread.Sleep(2700);
-                Console.Clear();
-                Console.Write("Выберите вариант сортировки:\n" +
-                              "1. По имени\n" +
-                              "2. По возрасту\n" +
-                              "3. По породе\n" +
-                              "Введите значение:");
+            {
+                InvalidCommandAction("Такой сортировки нет");
+                GetRequestText();
                 break;
+            }
         }
     }
 
     private static void PrintAnimal(ApplicationContext db)
     {
-        Console.WriteLine("| Id |   Name  | Age |    Breed    |");
+        Console.Clear();
+        Console.WriteLine("-------------------------------------------------------");
+        Console.WriteLine("| Id  |    Name    | Age |            Breed           |");
+        Console.WriteLine("-------------------------------------------------------");
+        
         foreach (var animal in db.Animals.ToList())
         {
-            Console.WriteLine($"| {animal.Id} | {animal.Name} |  {animal.Age}  | {animal.Breed} |");
+            Console.WriteLine("| {0, 3} | {1, 10} | {2, 3} | {3, 26} |", animal.Id, animal.Name, animal.Age, animal.Breed);
+            Console.WriteLine("-------------------------------------------------------");
         }
     }
-
+    
+    private static void PrintSortedAnimal(IOrderedQueryable<Animal> animalSortWithName)
+    {
+        Console.Clear();
+        Console.WriteLine("-------------------------------------------------------");
+        Console.WriteLine("| Id  |    Name    | Age |            Breed           |");
+        Console.WriteLine("-------------------------------------------------------");
+        
+        foreach (var animal in animalSortWithName)
+        {
+            Console.WriteLine("| {0, 3} | {1, 10} | {2, 3} | {3, 26} |", animal.Id, animal.Name, animal.Age, animal.Breed);
+            Console.WriteLine("-------------------------------------------------------");
+        }
+    }
+    
+    #endregion
+    
+    
     #region Common
 
     private static void GetRequestText()
