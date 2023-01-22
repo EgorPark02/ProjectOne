@@ -1,4 +1,4 @@
-﻿namespace ZadanieOtDimi;
+﻿namespace ZadanieOtDimi.Models;
 
 public class City
 {
