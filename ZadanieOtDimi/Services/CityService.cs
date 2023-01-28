@@ -1,4 +1,6 @@
-﻿namespace ZadanieOtDimi.Services;
+﻿using ZadanieOtDimi.Models;
+
+namespace ZadanieOtDimi.Services;
 
 public static class CityService
 {
@@ -11,8 +13,11 @@ public static class CityService
             Thread.Sleep(2000);
             
             
-            Console.Write("\nВыберите вариант сортировки:\n" +
-                          "1. По названию города\n" +
+            Console.Write("\nЧто необходимо сделать с таблицей:\n" +
+                          "1. Сортировка по названию города\n" +
+                          "2. Добавить город\n" +
+                          "3. Удалить город\n" +
+                          "4. Изменить город\n" +
                           "E. Выход\n" +
                           "Введите значение: ");
 
@@ -35,6 +40,33 @@ public static class CityService
 
                     CommonService.PressAnyKey();
                     return;
+                }
+                case "2":
+                {
+                    Console.Clear();
+                    PrintCity(db);
+                    AddCity(db);
+                    PrintCity(db);
+                    CommonService.InvalidCommandAction("Объект добавлен в таблицу...");
+                    break;
+                }
+                case "3":
+                {
+                    Console.Clear();
+                    PrintCity(db);
+                    DeleteCity(db);
+                    PrintCity(db);
+                    CommonService.InvalidCommandAction("Объект удалён из таблицы...");
+                    break;
+                }
+                case "4":
+                {
+                    Console.Clear();
+                    PrintCity(db);
+                    ChangeCity(db);
+                    PrintCity(db);
+                    CommonService.InvalidCommandAction("Данные изменены...");
+                    break;
                 }
                 case "e":
                 {
@@ -60,5 +92,44 @@ public static class CityService
             Console.WriteLine("| {0, 3} | {1, 13} |", city.Id, city.NameCity);
             Console.WriteLine("-----------------------");
         }
+    }
+
+    private static void AddCity(ApplicationContext db)
+    {
+        Console.Write("Введите название города: ");
+        string? name = Console.ReadLine();
+        
+        var city = new City { NameCity = name};
+        db.Cities.Add(city);
+        db.SaveChanges();
+    }
+
+    private static void DeleteCity(ApplicationContext db)
+    {
+        Console.Write("Введите ID города для удаления: ");
+        int id = Convert.ToInt32(Console.ReadLine());
+
+        var city = db.Cities.FirstOrDefault(c => c.Id == id);
+        if (city != null) db.Cities.Remove(city);
+        db.SaveChanges();
+    }
+
+    private static void ChangeCity(ApplicationContext db)
+    {
+        Console.Write("Введите ID города для изменения: ");
+        int id = Convert.ToInt32(Console.ReadLine());
+
+        var city = db.Cities.FirstOrDefault(c => c.Id == id);
+        
+        Console.Write("Введите название города для изменения: ");
+        string? name = Console.ReadLine();
+        
+        if (city != null)
+        {
+            city.NameCity = name;
+            db.Cities.Update(city);
+        }
+        
+        db.SaveChanges();
     }
 }

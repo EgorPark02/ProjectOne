@@ -9,6 +9,7 @@ internal class Program
         using var db = new ApplicationContext();
         while (true)
         {
+            
             CommonService.GetRequestText();
             var value = Console.ReadLine();
             if (string.IsNullOrEmpty(value))
