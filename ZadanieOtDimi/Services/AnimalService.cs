@@ -122,55 +122,90 @@ public static class AnimalService
 
     private static void AddNewAnimal(ApplicationContext db)
     {
-        Console.Write("Введите имя животного: ");
-        string name = Console.ReadLine();
+        try
+        {
+            Console.Write("Введите имя животного: ");
+            string name = Console.ReadLine();
 
-        Console.Write("Введите возраст животного: ");
-        int age = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Введите возраст животного: ");
+            int age = Convert.ToInt32(Console.ReadLine());
 
-        Console.Write("Введите породу животного: ");
-        string breed = Console.ReadLine();
+            Console.Write("Введите породу животного: ");
+            string breed = Console.ReadLine();
 
-        var animal = new Animal() {Name = name, Age = age, Breed = breed};
-        db.Animals.Add(animal);
-        db.SaveChanges();
+            var animal = new Animal() {Name = name, Age = age, Breed = breed};
+            db.Animals.Add(animal);
+            db.SaveChanges();
+        }
+        catch
+        {
+            Console.Clear();
+            Console.WriteLine("Возникла ошибка ввода...");
+            Thread.Sleep(2000);
+            PrintAnimal(db);
+            AddNewAnimal(db);
+        }
+        
     }
 
     private static void DeleteAnimal(ApplicationContext db)
     {
-        Console.Write("Введите ID животного для удаления: ");
-        int id = Convert.ToInt32(Console.ReadLine());
+        try
+        {
+            Console.Write("Введите ID животного для удаления: ");
+            int id = Convert.ToInt32(Console.ReadLine());
 
-        var animal = db.Animals.FirstOrDefault(a => a.Id == id);
+            var animal = db.Animals.FirstOrDefault(a => a.Id == id);
         
-        db.Animals.Remove(animal);
-        db.SaveChanges();
+            db.Animals.Remove(animal);
+            db.SaveChanges();
+        }
+        catch
+        {
+            Console.Clear();
+            Console.WriteLine("Возникла ошибка ввода...");
+            Thread.Sleep(2000);
+            PrintAnimal(db);
+            DeleteAnimal(db);
+        }
+        
     }
 
     private static void ChangeAnimal(ApplicationContext db)
     {
-        Console.Write("Введите ID животного для изменения: ");
-        int id = Convert.ToInt32(Console.ReadLine());
-
-        var animal = db.Animals.FirstOrDefault(a => a.Id == id);
-        
-        Console.Write("Введите имя для животного: ");
-        string? name = Console.ReadLine();
-        
-        Console.Write("Введите возраст для животного: ");
-        int age = Convert.ToInt32(Console.ReadLine());
-        
-        Console.Write("Введите породу для животного: ");
-        string? breed = Console.ReadLine();
-
-        if (animal != null)
+        try
         {
-            animal.Name = name;
-            animal.Age = age;
-            animal.Breed = breed;
-            db.Animals.Update(animal);
-        }
+            Console.Write("Введите ID животного для изменения: ");
+            int id = Convert.ToInt32(Console.ReadLine());
 
-        db.SaveChanges();
+            var animal = db.Animals.FirstOrDefault(a => a.Id == id);
+        
+            Console.Write("Введите имя для животного: ");
+            string? name = Console.ReadLine();
+        
+            Console.Write("Введите возраст для животного: ");
+            int age = Convert.ToInt32(Console.ReadLine());
+        
+            Console.Write("Введите породу для животного: ");
+            string? breed = Console.ReadLine();
+
+            if (animal != null)
+            {
+                animal.Name = name;
+                animal.Age = age;
+                animal.Breed = breed;
+                db.Animals.Update(animal);
+            }
+
+            db.SaveChanges();
+        }
+        catch
+        {
+            Console.Clear();
+            Console.WriteLine("Возникла ошибка ввода...");
+            Thread.Sleep(2000);
+            PrintAnimal(db);
+            ChangeAnimal(db);
+        }
     }
 }

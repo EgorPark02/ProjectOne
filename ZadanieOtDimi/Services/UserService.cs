@@ -105,48 +105,81 @@ public static class UserService
 
     private static void AddNewUser(ApplicationContext db)
     {
-        Console.Write("Введите имя пользователя: ");
-        string name = Console.ReadLine();
+        try
+        {
+            Console.Write("Введите имя пользователя: ");
+            string? name = Console.ReadLine();
         
-        Console.Write("Введите его возраст: ");
-        int age = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Введите его возраст: ");
+            int age = Convert.ToInt32(Console.ReadLine());
         
-        var user = new User { Name = name, Age = age };
-        db.Users.Add(user);
-        db.SaveChanges();
+            var user = new User { Name = name, Age = age };
+            db.Users.Add(user);
+            db.SaveChanges();
+        }
+        catch
+        {
+            Console.Clear();
+            Console.WriteLine("Возникла ошибка ввода...");
+            Thread.Sleep(2000);
+            PrintUser(db);
+            AddNewUser(db);
+        }
     }
 
     private static void DeleteUser(ApplicationContext db)
     {
-        Console.Write("Введите ID пользователя для удаления: ");
-        int id = Convert.ToInt32(Console.ReadLine());
+        try
+        {
+            Console.Write("Введите ID пользователя для удаления: ");
+            int id = Convert.ToInt32(Console.ReadLine());
 
-        var user = db.Users.FirstOrDefault(d => d.Id == id);
+            var user = db.Users.FirstOrDefault(d => d.Id == id);
         
-        db.Users.Remove(user);
-        db.SaveChanges();
+            db.Users.Remove(user);
+            db.SaveChanges();
+        }
+        catch
+        {
+            Console.Clear();
+            Console.WriteLine("Возникла ошибка ввода...");
+            Thread.Sleep(2000);
+            PrintUser(db);
+            DeleteUser(db);
+        }
     }
 
     private static void ChangeUser(ApplicationContext db)
     {
-        Console.Write("Введите ID пользователя для изменения: ");
-        int id = Convert.ToInt32(Console.ReadLine());
-
-        var user = db.Users.FirstOrDefault(d => d.Id == id);
-        
-        Console.Write("Введите имя для пользователя: ");
-        string? name = Console.ReadLine();
-        
-        Console.Write("Введите возраст пользователя: ");
-        int age = Convert.ToInt32(Console.ReadLine());
-
-        if (user != null)
+        try
         {
-            user.Name = name;
-            user.Age = age;
-            db.Users.Update(user);
-        }
+            Console.Write("Введите ID пользователя для изменения: ");
+            int id = Convert.ToInt32(Console.ReadLine());
 
-        db.SaveChanges();
+            var user = db.Users.FirstOrDefault(d => d.Id == id);
+        
+            Console.Write("Введите имя для пользователя: ");
+            string? name = Console.ReadLine();
+        
+            Console.Write("Введите возраст пользователя: ");
+            int age = Convert.ToInt32(Console.ReadLine());
+
+            if (user != null)
+            {
+                user.Name = name;
+                user.Age = age;
+                db.Users.Update(user);
+            }
+
+            db.SaveChanges();
+        }
+        catch
+        {
+            Console.Clear();
+            Console.WriteLine("Возникла ошибка ввода...");
+            Thread.Sleep(2000);
+            PrintUser(db);
+            ChangeUser(db);
+        }
     }
 }

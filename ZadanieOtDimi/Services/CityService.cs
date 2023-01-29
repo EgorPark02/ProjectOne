@@ -96,40 +96,74 @@ public static class CityService
 
     private static void AddCity(ApplicationContext db)
     {
-        Console.Write("Введите название города: ");
-        string? name = Console.ReadLine();
+        try
+        {
+            Console.Write("Введите название города: ");
+            string? name = Console.ReadLine();
         
-        var city = new City { NameCity = name};
-        db.Cities.Add(city);
-        db.SaveChanges();
+            var city = new City { NameCity = name};
+            db.Cities.Add(city);
+            db.SaveChanges();
+        }
+        catch
+        {
+            Console.Clear();
+            Console.WriteLine("Возникла ошибка");
+            Thread.Sleep(2000);
+            PrintCity(db);
+            AddCity(db);
+        }
+        
     }
 
     private static void DeleteCity(ApplicationContext db)
     {
-        Console.Write("Введите ID города для удаления: ");
-        int id = Convert.ToInt32(Console.ReadLine());
+        try
+        {
+            Console.Write("Введите ID города для удаления: ");
+            int id = Convert.ToInt32(Console.ReadLine());
 
-        var city = db.Cities.FirstOrDefault(c => c.Id == id);
-        if (city != null) db.Cities.Remove(city);
-        db.SaveChanges();
+            var city = db.Cities.FirstOrDefault(c => c.Id == id);
+            if (city != null) db.Cities.Remove(city);
+            db.SaveChanges();
+        }
+        catch
+        {
+            Console.Clear();
+            Console.WriteLine("Возникла ошибка");
+            Thread.Sleep(2000);
+            PrintCity(db);
+            DeleteCity(db);
+        }
     }
 
     private static void ChangeCity(ApplicationContext db)
     {
-        Console.Write("Введите ID города для изменения: ");
-        int id = Convert.ToInt32(Console.ReadLine());
-
-        var city = db.Cities.FirstOrDefault(c => c.Id == id);
-        
-        Console.Write("Введите название города для изменения: ");
-        string? name = Console.ReadLine();
-        
-        if (city != null)
+        try
         {
-            city.NameCity = name;
-            db.Cities.Update(city);
-        }
+            Console.Write("Введите ID города для изменения: ");
+            int id = Convert.ToInt32(Console.ReadLine());
+
+            var city = db.Cities.FirstOrDefault(c => c.Id == id);
         
-        db.SaveChanges();
+            Console.Write("Введите название города для изменения: ");
+            string? name = Console.ReadLine();
+        
+            if (city != null)
+            {
+                city.NameCity = name;
+                db.Cities.Update(city);
+            }
+        
+            db.SaveChanges();
+        }
+        catch
+        {
+            Console.Clear();
+            Console.WriteLine("Возникла ошибка");
+            Thread.Sleep(2000);
+            PrintCity(db);
+            ChangeCity(db);
+        }
     }
 }
